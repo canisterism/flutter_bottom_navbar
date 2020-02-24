@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bottom_navbar/next_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,6 +12,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: MainPage(),
+      routes: {
+        NextScreen.routeName: (context) => NextScreen(),
+      },
     );
   }
 }
@@ -23,32 +27,49 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  int _index = 0;
+  void _onBottomBarTap(int index) {
+    setState(() {
+      _index = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search Screen'),
+        title: [
+          Text('Search Screen'),
+          Text('Account Screen'),
+        ][_index],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            FlatButton(
-              onPressed: () => print('tapped'),
-              child: Container(
-                width: 200,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(5),
+            [
+              FlatButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed(NextScreen.routeName),
+                child: Container(
+                  width: 200,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.amber,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                      child: Text(
+                    'next screen',
+                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  )),
                 ),
-                child: Center(
-                    child: Text(
-                  'next screen',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
-                )),
               ),
-            ),
+              Text(
+                'Account Screen',
+                style: TextStyle(fontSize: 24, color: Colors.amber),
+              )
+            ][_index]
           ],
         ),
       ),
@@ -60,6 +81,8 @@ class _MainPageState extends State<MainPage> {
               title: Text('Account'), icon: Icon(Icons.account_circle)),
         ],
         selectedItemColor: Colors.amber[800],
+        currentIndex: _index,
+        onTap: _onBottomBarTap,
       ),
     );
   }
