@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bottom_navbar/account_screen.dart';
 import 'package:flutter_bottom_navbar/next_screen.dart';
+import 'package:flutter_bottom_navbar/search_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,63 +30,37 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _index = 0;
-  void _onBottomBarTap(int index) {
-    setState(() {
-      _index = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: [
-          Text('Search Screen'),
-          Text('Account Screen'),
-        ][_index],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            [
-              FlatButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed(NextScreen.routeName),
-                child: Container(
-                  width: 200,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                      child: Text(
-                    'next screen',
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  )),
-                ),
-              ),
-              Text(
-                'Account Screen',
-                style: TextStyle(fontSize: 24, color: Colors.amber),
-              )
-            ][_index]
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
+    return CupertinoTabScaffold(
+      tabBar: CupertinoTabBar(
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-              title: Text('Search'), icon: Icon(Icons.search)),
+            icon: Icon(Icons.search),
+            title: Text('Search'),
+          ),
           BottomNavigationBarItem(
-              title: Text('Account'), icon: Icon(Icons.account_circle)),
+            icon: Icon(Icons.account_circle),
+            title: Text('Account'),
+          ),
         ],
-        selectedItemColor: Colors.amber[800],
-        currentIndex: _index,
-        onTap: _onBottomBarTap,
       ),
+      tabBuilder: (context, index) {
+        switch (index) {
+          case 0:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(child: SearchScreen());
+            });
+            break;
+          case 1:
+            return CupertinoTabView(builder: (context) {
+              return CupertinoPageScaffold(child: AccountScreen());
+            });
+            break;
+          default:
+            return const CupertinoTabView();
+        }
+      },
     );
   }
 }
