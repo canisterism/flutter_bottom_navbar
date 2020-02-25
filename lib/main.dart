@@ -40,8 +40,8 @@ class _MainPageState extends State<MainPage> {
             title: Text('Search'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Account'),
+            icon: Icon(Icons.code),
+            title: Text('html'),
           ),
         ],
       ),
